@@ -421,7 +421,9 @@ const initLeaderboard = (config) => {
                 let html = '';
                 data.users.forEach((user, idx) => {
                     const isCurrentUser = user.is_current_user;
-                    const displayName = isCurrentUser ? youLabel : `${userNumberPrefix}${user.userid}`;
+                    const displayName = isCurrentUser
+                        ? youLabel
+                        : (user.fullname || `${userNumberPrefix}${user.userid}`);
                     const userIdBadge = isCurrentUser
                         ? `<span class="user-id-badge">${userIdBadgeLabel} ${userId}</span>`
                         : '';

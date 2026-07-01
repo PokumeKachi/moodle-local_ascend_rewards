@@ -99,11 +99,16 @@ class ajax_service {
 
         $xpcid = ($courseid > 0) ? $courseid : 0;
 
-        $sql = "SELECT x.userid, x.xp
+        $sql = "SELECT
+            x.userid,
+            x.xp,
+            u.firstname,
+            u.lastname
                 FROM {local_ascend_rewards_xp} x
                 JOIN {user} u ON u.id = x.userid
                 WHERE x.courseid = :cid AND x.xp > 0
-                  AND u.suspended = 0 AND u.deleted = 0
+                AND u.suspended = 0
+                AND u.deleted = 0
                 ORDER BY x.xp DESC, x.userid ASC";
 
         $rows = $DB->get_records_sql($sql, ['cid' => $xpcid]);
@@ -112,6 +117,7 @@ class ajax_service {
         foreach ($rows as $row) {
             $ranked[] = [
                 'userid' => (int)$row->userid,
+                'fullname' => fullname($row),
                 'xp' => (int)$row->xp,
                 'rank' => $r,
                 'medal' => self::medal_for_place($r),
